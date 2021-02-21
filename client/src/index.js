@@ -6,9 +6,12 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { DrizzleContext } from "@drizzle/react-plugin";
 import { Drizzle, generateStore } from "@drizzle/store";
-import options from "./drizzleOptions";
+import drizzleOptions from "./drizzleOptions";
+import appReducers from "./Reducers";
 
-const drizzle = new Drizzle(options);
+
+const drizzleStore = generateStore({drizzleOptions, appReducers, disableReduxDevTools: false});
+const drizzle = new Drizzle(drizzleOptions, drizzleStore);
 
 ReactDOM.render(
   <React.StrictMode>
