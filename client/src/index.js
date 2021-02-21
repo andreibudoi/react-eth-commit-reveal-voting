@@ -1,14 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import { DrizzleContext } from "@drizzle/react-plugin";
+import { Drizzle, generateStore } from "@drizzle/store";
+import options from "./drizzleOptions";
+
+const drizzle = new Drizzle(options);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <DrizzleContext.Provider drizzle={drizzle}>
+        <DrizzleContext.Consumer>
+          {drizzleContext => {
+            const { drizzle, drizzleState, initialized } = drizzleContext;
+
+            if (!initialized) {
+              return "Loading..."; // Can show relevant info to people who don't have Metamask installed
+            }
+
+            return <App drizzle={drizzle} drizzleState={drizzleState} />;
+          }}
+        </DrizzleContext.Consumer>
+      </DrizzleContext.Provider>
+    </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
