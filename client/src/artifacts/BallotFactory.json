@@ -31,7 +31,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -57,7 +58,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_address\",\"type\":\"address\"}],\"name\":\"deployedContract\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_details\",\"type\":\"string\"}],\"name\":\"createNewBallot\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"deployedBallots\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBallots\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/D/Andrei HDD/Facultate/FMI/an 3/licenta/react-eth-commit-reveal-voting/contracts/BallotFactory.sol\":\"BallotFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/Andrei HDD/Facultate/FMI/an 3/licenta/react-eth-commit-reveal-voting/contracts/Ballot.sol\":{\"keccak256\":\"0x2d862bfbdac5c6143cf87d5d82d04e2f065aa4eb9175026b2c8f19aa82fcfc60\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://eb38a8d0f14223698959d57e8315ef8e632d4e7cc952e3bb888b755a9a1def34\",\"dweb:/ipfs/QmYFmDeWfe9tSxFUe3p7fUG9gNr8aWrMTLfkxEa5efrtwZ\"]},\"/D/Andrei HDD/Facultate/FMI/an 3/licenta/react-eth-commit-reveal-voting/contracts/BallotFactory.sol\":{\"keccak256\":\"0x86649a3a266171bb3a4242542ce2f7fec7a149e0e1539b00a4f07a88921a5210\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c9a648d96be462650d030e449f549c249747a724f94efd8df158a9649781e615\",\"dweb:/ipfs/QmRz6xSAJxNo8DdBeQPxj7vpNvTSFJFFim7zLcJ7pMckyr\"]}},\"version\":1}",
@@ -1330,9 +1332,31 @@
     "name": "solc",
     "version": "0.7.4+commit.3f05b770.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "5777": {
+      "events": {
+        "0xc2295c21597e893fb3ac056c24bc384f0ff3796f36a6513a249e8178c5dbb12f": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_address",
+              "type": "address"
+            }
+          ],
+          "name": "deployedContract",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x158D257dc93aCEBC1cAe08719C334385f1DF9e69",
+      "transactionHash": "0xeec1c9b26f8d7684e119996da2094a7ce48ecc1a140a13eff2e9ad7fa9fae30e"
+    }
+  },
   "schemaVersion": "3.3.2",
-  "updatedAt": "2021-01-17T17:25:12.282Z",
+  "updatedAt": "2021-02-21T13:44:17.369Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
