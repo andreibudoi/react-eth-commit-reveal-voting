@@ -1,0 +1,1 @@
+export const REQUIRED_NETWORK = 5777;
