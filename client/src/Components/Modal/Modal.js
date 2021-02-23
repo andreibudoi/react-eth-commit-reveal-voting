@@ -32,10 +32,13 @@ const Modal = ({ children, trigger, style, onCloseTrigger, show }) => {
       {trigger && renderTrigger()}
       <RimbleModal isOpen={shown}>
         <Card
-          minWidth={"450px"}
+          mx={"auto"}
+          my={"auto"}
           p={"25px"}
+          width={["auto"]}
+          maxWidth={"960px"}
+          height={["100vh", "auto"]}
           style={{
-            maxHeight: "80%",
             overflowY: "auto",
             overflowX: "hidden",
             ...style
@@ -71,15 +74,14 @@ Modal.propTypes = {
   trigger: propTypes.oneOfType([propTypes.element, propTypes.bool]),
   show: propTypes.bool,
   style: propTypes.object,
-  onCloseTrigger: propTypes.func,
+  onCloseTrigger: propTypes.func
 };
 
 Modal.defaultProps = {
   trigger: false,
   style: {},
   show: false,
-  onCloseTrigger: () => {},
+  onCloseTrigger: () => {}
 };
-
 
 export default Modal;
