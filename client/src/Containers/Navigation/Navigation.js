@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Card, Flex, Heading, EthAddress, MetaMaskButton } from "rimble-ui";
+import { Box, Card, Flex, Heading, Text, Pill, Tooltip } from "rimble-ui";
 import { REQUIRED_NETWORK } from "../../config";
 import { DrizzleContext } from "@drizzle/react-plugin";
 
@@ -12,10 +12,24 @@ const Navigation = () => {
           return null;
         }
         return (
-          <Flex bg="primary" p={3} justifyContent="space-between" >
-            <Heading as={"h2"} color={"white"} my={"auto"} >
+          <Flex
+            bg="primary"
+            p={3}
+            justifyContent="space-between"
+            alignItems={"center"}
+          >
+            <Heading as={"h2"} color={"white"} my={"auto"}>
               Eth Poll
             </Heading>
+            <Tooltip message={drizzleState.activeAccount.account}>
+              <Pill color="primary">
+                <Text fontWeight="bold">
+                  {drizzleState.activeAccount.account.slice(0, 6) +
+                    "..." +
+                    drizzleState.activeAccount.account.slice(-4)}
+                </Text>
+              </Pill>
+            </Tooltip>
           </Flex>
         );
       }}
