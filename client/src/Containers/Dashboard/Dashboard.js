@@ -4,6 +4,7 @@ import { DrizzleContext } from "@drizzle/react-plugin";
 import { Button, Box, Heading, Text } from "rimble-ui";
 import Modal from "../../Components/Modal/Modal";
 import PollFactory from "../PollFactory/PollFactory";
+import PollList from "../PollList/PollList";
 
 const Dashboard = () => {
   return (
@@ -15,10 +16,29 @@ const Dashboard = () => {
         }
         return (
           <PageContainer>
-            <Text>{drizzleState.activeAccount.account}</Text>
-            <Text>{drizzleState.web3.networkId}</Text>
-            <PollFactory drizzle={drizzle} drizzleState={drizzleState} initialized={initialized} />
-            
+            <Heading
+              as={"h1"}
+              margin={"10px 0px 10px"}
+              fontWeight={"800"}
+              color={"primary"}
+            >
+              Latest polls
+            </Heading>
+            <Heading
+              as={"h4"}
+              margin={0}
+              color={"#808080"}
+            >{`Polls available: ${drizzle.contractList.length}`}</Heading>
+            <PollFactory
+              drizzle={drizzle}
+              drizzleState={drizzleState}
+              initialized={initialized}
+            />
+            <PollList
+              drizzle={drizzle}
+              drizzleState={drizzleState}
+              initialized={initialized}
+            />
           </PageContainer>
         );
       }}
