@@ -36,6 +36,7 @@ const Modal = ({ children, trigger, style, onCloseTrigger, show }) => {
           my={"auto"}
           p={"25px"}
           width={["auto"]}
+          minWidth={"340px"}
           maxWidth={"960px"}
           height={["100vh", "auto"]}
           style={{

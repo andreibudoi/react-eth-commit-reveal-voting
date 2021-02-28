@@ -25,7 +25,7 @@ ReactDOM.render(
               return "Loading..."; // Can show relevant info to people who don't have Metamask installed
             }
 
-            return <App drizzle={drizzle} drizzleState={drizzleState} />;
+            return <App drizzle={drizzle} drizzleState={drizzleState} initialized={initialized} />;
           }}
         </DrizzleContext.Consumer>
       </DrizzleContext.Provider>

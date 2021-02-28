@@ -6,7 +6,7 @@ import Modal from "./Components/Modal/Modal";
 import Navigation from "./Containers/Navigation/Navigation";
 import Dashboard from "./Containers/Dashboard/Dashboard";
 
-const App = ({ drizzle, drizzleState }) => {
+const App = ({ drizzle, drizzleState, initialized }) => {
   console.log("drizzle: ", drizzle);
   console.log("drizzleState: ", drizzleState);
 
