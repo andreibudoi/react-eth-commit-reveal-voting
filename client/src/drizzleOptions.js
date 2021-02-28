@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import BallotFactory from "./artifacts/BallotFactory.json";
+import PollFactory from "./artifacts/PollFactory.json";
 
 const options = {
     web3: {
@@ -10,9 +10,9 @@ const options = {
             url: "ws://127.0.0.1:7545", //Ganache for testing; could change this to Infura so users without Metamask may use the app 
         },
     },
-    contracts: [BallotFactory],
+    contracts: [PollFactory],
     events: {
-        BallotFactory: ["deployedContract"],
+        PollFactory: ["deployedContract"],
     },
 };
 

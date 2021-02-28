@@ -7,7 +7,7 @@ pragma solidity >=0.7.0 <0.8.0;
 /// @author Andrei Budoi
 /// @notice Votes must be encrypted using keccak256
 /// @dev Should try to change most strings into bytes32 sometime
-contract Ballot {
+contract Poll {
   
     struct Voter {
         string name;   // can represent name or id 
@@ -15,8 +15,8 @@ contract Ballot {
     }
 
     // State of a vote
-    // Committed -> After sending a hashed vote during the "Voting" state of the ballot
-    // Revealed -> After sending the hashed vote together with correct decrypted vote during the "Revealing" state of the ballot
+    // Committed -> After sending a hashed vote during the "Voting" state of the poll
+    // Revealed -> After sending the hashed vote together with correct decrypted vote during the "Revealing" state of the poll
     enum VoteState { Committed, Revealed }
 
     struct Vote{
@@ -40,19 +40,19 @@ contract Ballot {
     // uint32 -> max 4294967296 voters/votes
     uint32 public totalVoters = 0;
     uint32 public totalVotes = 0;
-    address payable public ballotOwner;
-    string public ballotDetails;
+    address payable public pollOwner;
+    string public pollDetails;
 
-    //State of the Ballot Contract
+    //State of the Poll Contract
     //Created -> Proposals and voters are added
     //Voting -> Every registered voter commits a hashed vote with the format "[index of proposal]-[password]" 
     //      passwords must be hashed using Keccak-256
     //      example: "2-yogurt" -> "0xedf92158c3f1170092fb3b3f15ff96adf2ee73ea0c92d07d2dfc84612938abf9")
     //Revealing -> Voting has ended and everybody has to submit their passwords so that the votes can be counted
     //Ended -> Final results become available
-    enum BallotState { Created, Voting, Revealing, Ended }
+    enum PollState { Created, Voting, Revealing, Ended }
 
-	BallotState public ballotState;
+	PollState public pollState;
 
 
     /** EVENTS */
@@ -61,9 +61,9 @@ contract Ballot {
     event voterAdded(address voter, string name);
     event choiceAdded(string name);
     event choiceName(string name);
-    event votingStarted(bytes32 ballotInfo);
+    event votingStarted(bytes32 pollInfo);
     event voteCommitted(bytes32 voteInfo, bytes32 pass);
-    event votesCanBeRevealed(bytes32 ballotInfo);
+    event votesCanBeRevealed(bytes32 pollInfo);
     event voteRevealed(bytes32 voteInfo, uint8 vote, bytes32 name);
     event votingEnded(string name, uint32 result);
     
@@ -71,19 +71,19 @@ contract Ballot {
     /** FUNCTIONS */
 
     /// @notice Setup the owner of the contract and its description
-    constructor(string memory _ballotDetails, address payable _owner){
-        ballotOwner = _owner;
-        ballotDetails = _ballotDetails;
-        ballotState = BallotState.Created;
+    constructor(string memory _pollDetails, address payable _owner){
+        pollOwner = _owner;
+        pollDetails = _pollDetails;
+        pollState = PollState.Created;
     }
     
-    modifier onlyBallotOwner() {
-		require(msg.sender == ballotOwner);
+    modifier onlyPollOwner() {
+		require(msg.sender == pollOwner);
 		_;
 	}
 
-    modifier onlyWhenStateIs(BallotState _state) {
-		require(ballotState == _state);
+    modifier onlyWhenStateIs(PollState _state) {
+		require(pollState == _state);
 		_;
 	}
 
@@ -93,8 +93,8 @@ contract Ballot {
     /// @param voterName_ The voter's name or id
     function addVoter(address voterAddress_, string memory voterName_)
         public
-        onlyBallotOwner
-        onlyWhenStateIs(BallotState.Created)
+        onlyPollOwner
+        onlyWhenStateIs(PollState.Created)
     {
         require(bytes(voterName_).length != 0, "Enter a name!");
         require(bytes(voters[voterAddress_].name).length == 0 , "Voter already registered!");
@@ -114,8 +114,8 @@ contract Ballot {
     /// @param _choiceName Name or description of proposal.
     function addChoice(string memory _choiceName)
         public
-        onlyBallotOwner
-        onlyWhenStateIs(BallotState.Created)
+        onlyPollOwner
+        onlyWhenStateIs(PollState.Created)
     {
         choices.push(Choice({
             name: _choiceName,
@@ -134,10 +134,10 @@ contract Ballot {
     /// @notice Start the vote
     function startVote()
         public
-        onlyBallotOwner
-        onlyWhenStateIs(BallotState.Created)
+        onlyPollOwner
+        onlyWhenStateIs(PollState.Created)
     {
-        ballotState = BallotState.Voting;     
+        pollState = PollState.Voting;     
         emit votingStarted("Voting has started");
     }
 
@@ -147,10 +147,10 @@ contract Ballot {
     /// @notice https://emn178.github.io/online-tools/keccak_256.html
     /// @notice Example: "2-yogurt" (picked third option with "yogurt" as a password) will be encrypted and sent as 
     /// @notice "0xedf92158c3f1170092fb3b3f15ff96adf2ee73ea0c92d07d2dfc84612938abf9"
-    /// @notice !!!! No two hashes can be the same in a ballot. A hash must be unique
+    /// @notice !!!! No two hashes can be the same in a poll. A hash must be unique
     function commitVote(bytes32 _voteCommit)
         public
-        onlyWhenStateIs(BallotState.Voting)
+        onlyWhenStateIs(PollState.Voting)
     {
         Voter storage sender = voters[msg.sender];
         
@@ -176,10 +176,10 @@ contract Ballot {
     /// @notice Start revealing votes
     function startReveal()
         public
-        onlyBallotOwner
-        onlyWhenStateIs(BallotState.Voting)
+        onlyPollOwner
+        onlyWhenStateIs(PollState.Voting)
     {
-        ballotState = BallotState.Revealing;     
+        pollState = PollState.Revealing;     
         emit votesCanBeRevealed("Please reveal your votes now");
     }
 
@@ -189,7 +189,7 @@ contract Ballot {
     /// @param _voteCommit Your encrypted vote committed during "Voting" state.
     function revealVote(string memory _choiceNumber, string memory _vote, bytes32 _voteCommit) 
         public
-        onlyWhenStateIs(BallotState.Revealing)
+        onlyWhenStateIs(PollState.Revealing)
     {
         require(votes[_voteCommit].voterAddress == msg.sender, "This vote doesn't exist or isn't yours");
         require(votes[_voteCommit].voteState == VoteState.Committed, "This vote was already revealed");
@@ -218,8 +218,8 @@ contract Ballot {
     /// @return winnerName Winner's name and vote count
     function endVote() 
         public
-        onlyBallotOwner
-        onlyWhenStateIs(BallotState.Revealing)
+        onlyPollOwner
+        onlyWhenStateIs(PollState.Revealing)
         returns (string memory winnerName, uint32 winnerVoteCount)
     {
         uint winningVoteCount = 0;
@@ -233,7 +233,7 @@ contract Ballot {
         }
 
         winnerName = choices[winnerIndex].name;
-        ballotState = BallotState.Ended;     
+        pollState = PollState.Ended;     
         emit votingEnded(winnerName, uint32(winningVoteCount));
         return (winnerName, uint32(winningVoteCount));
     }

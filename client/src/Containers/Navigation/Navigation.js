@@ -14,7 +14,7 @@ const Navigation = () => {
         return (
           <Flex bg="primary" p={3} justifyContent="space-between" >
             <Heading as={"h2"} color={"white"} my={"auto"} >
-              Ballot
+              Eth Poll
             </Heading>
           </Flex>
         );

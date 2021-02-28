@@ -1,5 +1,5 @@
-const BallotFactory = artifacts.require("BallotFactory");
+const PollFactory = artifacts.require("PollFactory");
 
 module.exports = async function (deployer) {
-    await deployer.deploy(BallotFactory);
+    await deployer.deploy(PollFactory);
 };
