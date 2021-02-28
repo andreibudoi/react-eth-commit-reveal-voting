@@ -25,29 +25,7 @@ const App = ({ drizzle, drizzleState, initialized }) => {
     }
   }, []);
 
-  useEffect(() => {
-    const getPolls = async () => {
-      // Fetch asynchronously all children of PollFactory using web3 method and add them to drizzle store
-      const polls = await drizzle.contracts.PollFactory.methods
-        .getPolls()
-        .call();
-      console.log(polls);
-      polls &&
-        polls.forEach(async pollAddress => {
-          if (!Object.keys(drizzleState.contracts).includes(pollAddress)) {
-            const web3Contract = new drizzle.web3.eth.Contract(
-              Poll.abi,
-              pollAddress
-            );
-            await drizzle.addContract(
-              { contractName: pollAddress, web3Contract },
-              POLL_EVENTS
-            );
-          }
-        });
-    };
-    getPolls();
-  }, []);
+  
 
   return (
     <>
