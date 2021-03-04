@@ -28,7 +28,7 @@ const Dashboard = () => {
               as={"h4"}
               margin={0}
               color={"#808080"}
-            >{`Polls available: ${drizzle.contractList.length}`}</Heading>
+            >{`Polls available: ${drizzle.contractList.length - 1}`}</Heading>
             <PollFactory
               drizzle={drizzle}
               drizzleState={drizzleState}
