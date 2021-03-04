@@ -1,23 +1,35 @@
-import React from "react";
-import { Card } from "rimble-ui";
+import { React, useState } from "react";
+import { Card, Input } from "rimble-ui";
 import PollCard from "../PollCard/PollCard";
 
 const PollList = ({ drizzleState, drizzle, initialized }) => {
+  const [searchTerm, setSearchTerm] = useState("");
   if (!initialized) return null;
   const pollList = Object.keys(drizzle.contracts)
-    .filter(contractName => contractName !== "PollFactory")
+    .filter(
+      contractName =>
+        contractName !== "PollFactory" &&
+        contractName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+    )
     .reverse();
-  console.log(pollList);
 
   return (
     <>
-      {pollList.map(pollName => (
+      <Input
+        width={"100%"}
+        type="text"
+        placeholder="Search by poll address"
+        value={searchTerm}
+        onChange={event => setSearchTerm(event.target.value)}
+        marginBottom={"20px"}
+      />
+      {pollList.map(pollAddress => (
         <PollCard
-          pollName={pollName}
+          pollAddress={pollAddress}
           drizzle={drizzle}
           drizzleState={drizzleState}
           initialized={initialized}
-          key={pollName}
+          key={pollAddress}
         />
       ))}
     </>
