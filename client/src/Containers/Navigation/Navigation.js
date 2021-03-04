@@ -21,12 +21,12 @@ const Navigation = () => {
             <Heading as={"h2"} color={"white"} my={"auto"}>
               Eth Poll
             </Heading>
-            <Tooltip message={drizzleState.activeAccount.account}>
+            <Tooltip message={drizzleState.activeAccount?.account}>
               <Pill color="primary">
                 <Text fontWeight="bold">
-                  {drizzleState.activeAccount.account.slice(0, 6) +
+                  {drizzleState.activeAccount?.account?.slice(0, 6) +
                     "..." +
-                    drizzleState.activeAccount.account.slice(-4)}
+                    drizzleState.activeAccount?.account?.slice(-4)}
                 </Text>
               </Pill>
             </Tooltip>
