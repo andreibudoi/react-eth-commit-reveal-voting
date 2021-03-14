@@ -10,10 +10,11 @@ import {
   Box,
   Text
 } from "rimble-ui";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const POLL_STATES = ["Newly created", "In voting", "Now revealing", "Ended"];
 const POLL_COLORS = ["primary", "green", "blue", "yellow"]
+
 const PollCard = ({ pollAddress, drizzleState, drizzle, initialized }) => {
   const history = useHistory();
   const contract = drizzle.contracts[pollAddress];

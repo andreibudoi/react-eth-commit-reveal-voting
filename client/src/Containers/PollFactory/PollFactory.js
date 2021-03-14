@@ -12,8 +12,10 @@ import {
 import Modal from "../../Components/Modal/Modal";
 import Poll from "../../artifacts/Poll.json";
 import { POLL_EVENTS } from "../../config";
+import { useHistory } from "react-router-dom";
 
 const PollFactory = ({ drizzleState, drizzle, initialized }) => {
+  const history = useHistory();
   const [name, setName] = useState("");
 
   useEffect(() => {
@@ -25,6 +27,7 @@ const PollFactory = ({ drizzleState, drizzle, initialized }) => {
       console.log(polls);
       polls &&
         polls.forEach(async pollAddress => {
+          pollAddress = pollAddress.toLowerCase();
           if (!Object.keys(drizzleState.contracts).includes(pollAddress)) {
             const web3Contract = new drizzle.web3.eth.Contract(
               Poll.abi,
@@ -44,13 +47,16 @@ const PollFactory = ({ drizzleState, drizzle, initialized }) => {
     const response = await drizzle.contracts.PollFactory.methods
       .createNewPoll(name)
       .send();
-    const pollAddress = response.events.deployedContract.returnValues[0];
-    console.log(pollAddress);
+    let pollAddress = response.events.deployedContract.returnValues[0];
+    pollAddress = pollAddress.toLowerCase();
     const web3Contract = new drizzle.web3.eth.Contract(Poll.abi, pollAddress);
-    await drizzle.addContract(
-      { contractName: pollAddress, web3Contract },
-      POLL_EVENTS
-    );
+    try {
+      await drizzle.addContract(
+        { contractName: pollAddress, web3Contract },
+        POLL_EVENTS
+      );
+      history.push(`/poll/${pollAddress}`);
+    } catch {}
   };
 
   return (
