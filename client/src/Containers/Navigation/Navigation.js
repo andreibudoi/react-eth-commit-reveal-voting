@@ -2,8 +2,11 @@ import React from "react";
 import { Box, Card, Flex, Heading, Text, Pill, Tooltip } from "rimble-ui";
 import { REQUIRED_NETWORK } from "../../config";
 import { DrizzleContext } from "@drizzle/react-plugin";
+import { useHistory } from "react-router-dom";
 
 const Navigation = () => {
+  const history = useHistory();
+
   return (
     <DrizzleContext.Consumer>
       {drizzleContext => {
@@ -18,7 +21,13 @@ const Navigation = () => {
             justifyContent="space-between"
             alignItems={"center"}
           >
-            <Heading as={"h2"} color={"white"} my={"auto"}>
+            <Heading
+              as={"h2"}
+              color={"white"}
+              my={"auto"}
+              style={{ cursor: "pointer" }}
+              onClick={() => history.push("/")}
+            >
               Eth Poll
             </Heading>
             <Tooltip message={drizzleState.activeAccount?.account}>
