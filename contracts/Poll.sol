@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0 <0.8.0;
-
-
+pragma solidity ^0.8.0;
 
 /// @title Commit Reveal Voting Scheme
 /// @author Andrei Budoi
@@ -12,6 +10,12 @@ contract Poll {
     struct Voter {
         string name;   // can represent name or id 
         bool voted;  // if true, that person already voted
+    }
+    
+    // Used for registering new voters
+    struct AddVoterStruct {
+        address voterAddress;
+        string voterName;
     }
 
     // State of a vote
@@ -29,18 +33,19 @@ contract Poll {
         string name;   // short name (up to 32 chars)
         uint32 voteCount; // number of accumulated votes (max 4294967296 votes per proposal)
     }
-
-
-    mapping(bytes32 => Vote) votes; // Either `Committed` or `Revealed`; indexed by hashed choice
-    mapping(address => Voter) voters; // Registered voters are indexed by their wallet address
-
+    
     // A dynamically-sized array of `Choice` structs.
     Choice[] public choices;
+    
+    Choice public winner;
+
+    mapping(bytes32 => Vote) votes; // Either `Committed` or `Revealed`; indexed by hashed choice
+    mapping(address => Voter) public voters; // Registered voters are indexed by their wallet address
 
     // uint32 -> max 4294967296 voters/votes
     uint32 public totalVoters = 0;
     uint32 public totalVotes = 0;
-    address payable public pollOwner;
+    address public pollOwner;
     string public pollDetails;
 
     //State of the Poll Contract
@@ -58,20 +63,18 @@ contract Poll {
     /** EVENTS */
 
     // Events used to log what's going on in the contract
-    event voterAdded(address voter, string name);
-    event choiceAdded(string name);
-    event choiceName(string name);
+    event votersAdded(AddVoterStruct[] voters);
+    event choicesAdded(string[] names);
     event votingStarted(bytes32 pollInfo);
     event voteCommitted(bytes32 voteInfo, bytes32 pass);
     event votesCanBeRevealed(bytes32 pollInfo);
     event voteRevealed(bytes32 voteInfo, uint8 vote, bytes32 name);
     event votingEnded(string name, uint32 result);
-    
 
     /** FUNCTIONS */
 
     /// @notice Setup the owner of the contract and its description
-    constructor(string memory _pollDetails, address payable _owner){
+    constructor(string memory _pollDetails, address _owner){
         pollOwner = _owner;
         pollDetails = _pollDetails;
         pollState = PollState.Created;
@@ -88,48 +91,42 @@ contract Poll {
 	}
 
     /// @notice Register a voter. Must have a name or id and it shouldn't be already registered.
-    /// @dev Maybe change function to accept array of voters?
-    /// @param voterAddress_ The voter's wallet address
-    /// @param voterName_ The voter's name or id
-    function addVoter(address voterAddress_, string memory voterName_)
-        public
+    /// @param _voterArray The voters' wallet addresses and names
+    function addVoters(AddVoterStruct[] memory _voterArray) 
+        public 
         onlyPollOwner
         onlyWhenStateIs(PollState.Created)
     {
-        require(bytes(voterName_).length != 0, "Enter a name!");
-        require(bytes(voters[voterAddress_].name).length == 0 , "Voter already registered!");
-
-        Voter memory voter;
-        voter.name = voterName_;
-        voter.voted = false;    
-        voters[voterAddress_] = voter; // Add registered voter to mapping
-
-        totalVoters++;
-
-        emit voterAdded(voterAddress_, voterName_);
+        for(uint i=0; i<_voterArray.length; i++){
+            require(bytes(_voterArray[i].voterName).length != 0, "Enter a name!");
+            require(bytes(voters[_voterArray[i].voterAddress].name).length == 0 , "Voter already registered!");
+            voters[_voterArray[i].voterAddress].name=_voterArray[i].voterName; // Add registered voter to mapping
+            totalVoters++;
+        }
+        emit votersAdded(_voterArray);
     }
 
-    /// @notice Add a new choice to vote for
-    /// @dev Maybe change function to accept array of choices?
-    /// @param _choiceName Name or description of proposal.
-    function addChoice(string memory _choiceName)
+    /// @notice Adds new choices to vote for
+    /// @param _choiceNames Array of Names or descriptions of proposals.
+    function addChoices(string[] memory _choiceNames)
         public
         onlyPollOwner
         onlyWhenStateIs(PollState.Created)
     {
-        choices.push(Choice({
-            name: _choiceName,
-            voteCount: 0
-        }));
-        emit choiceAdded(_choiceName);
+        for(uint i=0; i<_choiceNames.length; i++){
+            choices.push(Choice({
+                name: _choiceNames[i],
+                voteCount: 0
+            }));
+        }
+        emit choicesAdded(_choiceNames);
     }
     
-    /// @notice Show the list of choices
-    function showChoices () public {
-        for (uint8 i = 0; i < choices.length; i++) {
-            emit choiceName(choices[i].name);
-        }
-    }
+    /// @notice Returns the list of choices for frontend
+    function getChoices() public view returns(Choice[] memory) 
+    { 
+        return choices; 
+    } 
 
     /// @notice Start the vote
     function startVote()
@@ -156,7 +153,7 @@ contract Poll {
         
         require(bytes(sender.name).length != 0 , "Address not registered");
         require(!sender.voted, "Already voted.");
-        require(votes[_voteCommit].voterAddress == address(0x0), "There already exists a vote with this hash");
+        require(votes[_voteCommit].voterAddress == address(0x0), "There already exists a vote with this password");
 
         Vote memory vote;
         // Create vote
@@ -186,14 +183,14 @@ contract Poll {
     /// @notice Reveal your vote. 
     /// @param _choiceNumber Index of your picked choice. Must match with _vote's [No. of choice]
     /// @param _vote Your decrypted vote with the format "[No. of choice]-[password]". Must match _voteCommit if encrypted with keccak256.
-    /// @param _voteCommit Your encrypted vote committed during "Voting" state.
-    function revealVote(string memory _choiceNumber, string memory _vote, bytes32 _voteCommit) 
+    function revealVote(string memory _choiceNumber, string memory _vote) //, bytes32 _voteCommit) 
         public
         onlyWhenStateIs(PollState.Revealing)
     {
-        require(votes[_voteCommit].voterAddress == msg.sender, "This vote doesn't exist or isn't yours");
-        require(votes[_voteCommit].voteState == VoteState.Committed, "This vote was already revealed");
-        require(keccak256(abi.encodePacked(_vote)) == _voteCommit, "Your vote doesn't match your hash");
+        bytes32 encryptedVote = keccak256(abi.encodePacked(_vote));
+        
+        require(votes[encryptedVote].voterAddress == msg.sender, "This vote doesn't exist or isn't yours");
+        require(votes[encryptedVote].voteState == VoteState.Committed, "This vote was already revealed");
 
         // Check first bytes of _choiceNumber and _vote to see if they match
         bytes memory bytesChoiceNumber = bytes(_choiceNumber);
@@ -210,7 +207,7 @@ contract Poll {
         choices[uintChoiceNumber].voteCount += 1;
 
         //Change state of vote
-        votes[_voteCommit].voteState == VoteState.Revealed;
+        votes[encryptedVote].voteState == VoteState.Revealed;
     }
     
     /// @notice Ends the vote. Committed votes cannot be revealed anymore
@@ -222,7 +219,7 @@ contract Poll {
         onlyWhenStateIs(PollState.Revealing)
         returns (string memory winnerName, uint32 winnerVoteCount)
     {
-        uint winningVoteCount = 0;
+        uint32 winningVoteCount = 0;
         uint winnerIndex = 0;
 
         for (uint i = 0; i < choices.length; i++) {
@@ -233,6 +230,11 @@ contract Poll {
         }
 
         winnerName = choices[winnerIndex].name;
+        
+        // Save the winner in a public variable
+        winner.name = winnerName;
+        winner.voteCount = winningVoteCount;
+        
         pollState = PollState.Ended;     
         emit votingEnded(winnerName, uint32(winningVoteCount));
         return (winnerName, uint32(winningVoteCount));
