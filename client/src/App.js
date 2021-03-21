@@ -6,7 +6,7 @@ import Modal from "./Components/Modal/Modal";
 import Navigation from "./Containers/Navigation/Navigation";
 import Dashboard from "./Containers/Dashboard/Dashboard";
 import { POLL_EVENTS } from "./config";
-import Poll from "./Containers/Poll/Poll";
+import PollLoader from "./Containers/Poll/PollLoader";
 
 const App = ({ drizzle, drizzleState, initialized }) => {
   console.log("drizzle: ", drizzle);
@@ -33,7 +33,7 @@ const App = ({ drizzle, drizzleState, initialized }) => {
         <Route
           path="/poll/:pollAddress"
           render={props => (
-            <Poll
+            <PollLoader
               {...props}
               drizzle={drizzle}
               drizzleState={drizzleState}
