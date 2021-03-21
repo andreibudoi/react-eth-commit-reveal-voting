@@ -46,7 +46,6 @@ const PollCard = ({ pollAddress, drizzleState, drizzle, initialized }) => {
             <Heading as={"h2"} margin={0}>
               {pollDetails.value}
             </Heading>
-            {/* need to map states to colors */}
             <Pill color={POLL_STATES[pollState.value].color} fontWeight="bold">
               {POLL_STATES[pollState.value].name}
             </Pill>
