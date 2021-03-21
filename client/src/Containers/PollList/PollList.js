@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { Card, Input } from "rimble-ui";
-import PollCard from "../PollCard/PollCard";
+import { PollCard } from "..";
 
 const PollList = ({ drizzleState, drizzle, initialized }) => {
   const [searchTerm, setSearchTerm] = useState("");

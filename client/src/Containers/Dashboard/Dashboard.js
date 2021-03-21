@@ -1,10 +1,7 @@
 import React from "react";
-import PageContainer from "../PageContainer/PageContainer";
 import { DrizzleContext } from "@drizzle/react-plugin";
 import { Button, Box, Heading, Text } from "rimble-ui";
-import Modal from "../../Components/Modal/Modal";
-import PollFactory from "../PollFactory/PollFactory";
-import PollList from "../PollList/PollList";
+import { PollFactory, PollList, PageContainer } from "..";
 
 const Dashboard = () => {
   return (

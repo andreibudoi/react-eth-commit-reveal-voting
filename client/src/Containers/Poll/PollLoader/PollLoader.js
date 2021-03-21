@@ -1,9 +1,10 @@
 import { React, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { POLL_EVENTS } from "../../config";
-import Poll from "../../artifacts/Poll.json";
-import PageContainer from "../PageContainer/PageContainer";
+import { POLL_EVENTS } from "../../../config";
+import Poll from "../../../artifacts/Poll.json";
+import PageContainer from "../../PageContainer/PageContainer";
 import { Card } from "rimble-ui";
+import { Poll as PollPage } from "../";
 
 const PollContainer = ({ drizzleState, drizzle, initialized }) => {
   let { pollAddress } = useParams();
@@ -49,7 +50,7 @@ const PollContainer = ({ drizzleState, drizzle, initialized }) => {
 
   return (
     <PageContainer>
-      <Card>{poll}</Card>
+      <PollPage drizzle={drizzle} drizzleState={drizzleState} poll={poll} />
     </PageContainer>
   );
 };

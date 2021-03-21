@@ -9,7 +9,7 @@ import {
   Field,
   Input
 } from "rimble-ui";
-import Modal from "../../Components/Modal/Modal";
+import { Modal } from "../../Components";
 import Poll from "../../artifacts/Poll.json";
 import { POLL_EVENTS } from "../../config";
 import { useHistory } from "react-router-dom";
