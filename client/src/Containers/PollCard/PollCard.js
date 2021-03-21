@@ -11,9 +11,7 @@ import {
   Text
 } from "rimble-ui";
 import { useHistory } from "react-router-dom";
-
-const POLL_STATES = ["Newly created", "In voting", "Now revealing", "Ended"];
-const POLL_COLORS = ["primary", "green", "blue", "yellow"]
+import { POLL_STATES } from "../../config";
 
 const PollCard = ({ pollAddress, drizzleState, drizzle, initialized }) => {
   const history = useHistory();
@@ -49,8 +47,8 @@ const PollCard = ({ pollAddress, drizzleState, drizzle, initialized }) => {
               {pollDetails.value}
             </Heading>
             {/* need to map states to colors */}
-            <Pill color={POLL_COLORS[pollState.value]} fontWeight="bold">
-              {POLL_STATES[pollState.value]}
+            <Pill color={POLL_STATES[pollState.value].color} fontWeight="bold">
+              {POLL_STATES[pollState.value].name}
             </Pill>
           </Flex>
 

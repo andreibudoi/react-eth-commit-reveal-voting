@@ -8,3 +8,9 @@ export const POLL_EVENTS = [
   "voteRevealed",
   "votingEnded"
 ];
+export const POLL_STATES = [
+  { name: "Newly created", color: "primary" },
+  { name: "In voting", color: "green" },
+  { name: "Now revealing", color: "fuchsia" },
+  { name: "Ended", color: "darkorange" }
+];
