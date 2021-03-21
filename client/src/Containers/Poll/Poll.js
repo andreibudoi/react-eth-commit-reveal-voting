@@ -50,7 +50,7 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
   const totalVoters = contractState.pollState[keys.totalVotersKey];
   const totalVotes = contractState.pollState[keys.totalVotesKey];
   const choices = contractState.pollState[keys.choicesKey];
-  console.log(choices);
+
   return pollDetails &&
     pollOwner &&
     pollState &&
@@ -58,7 +58,9 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
     totalVotes &&
     choices ? (
     <>
-      <Info />
+      <Info
+        info={{ pollDetails, pollOwner, pollState, totalVoters, totalVotes, choices }}
+      />
       <Owner />
       <Voter />
     </>
