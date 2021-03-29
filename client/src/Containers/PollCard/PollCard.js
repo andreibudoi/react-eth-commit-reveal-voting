@@ -8,7 +8,8 @@ import {
   Field,
   Input,
   Box,
-  Text
+  Text,
+  Loader
 } from "rimble-ui";
 import { useHistory } from "react-router-dom";
 import { POLL_STATES } from "../../config";
@@ -82,7 +83,9 @@ const PollCard = ({ pollAddress, drizzleState, drizzle, initialized }) => {
           </Flex>
         </Flex>
       ) : (
-        <div>Loading poll info...</div>
+        <Flex justifyContent={"center"} alignItems={"center"}>
+          <Loader />
+        </Flex>
       )}
     </Card>
   );

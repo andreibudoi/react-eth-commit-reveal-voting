@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { POLL_EVENTS } from "../../../config";
 import Poll from "../../../artifacts/Poll.json";
 import PageContainer from "../../PageContainer/PageContainer";
-import { Card } from "rimble-ui";
+import { Card, Loader } from "rimble-ui";
 import { Poll as PollPage } from "../";
 
 const PollContainer = ({ drizzleState, drizzle, initialized }) => {
@@ -45,8 +45,20 @@ const PollContainer = ({ drizzleState, drizzle, initialized }) => {
   }, []);
 
   if (!initialized) return "Loading Drizzle";
-  if (poll === null) return <Card>Loading poll...</Card>;
-  if (poll === false) return <Card>Does not exist.</Card>;
+  if (poll === null)
+    return (
+      <PageContainer>
+        <Card>
+          <Loader />
+        </Card>
+      </PageContainer>
+    );
+  if (poll === false)
+    return (
+      <PageContainer>
+        <Card>Does not exist.</Card>
+      </PageContainer>
+    );
 
   return (
     <PageContainer>
