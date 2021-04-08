@@ -10,7 +10,14 @@ import {
   Button
 } from "rimble-ui";
 
-const Modal = ({ children, trigger, style, onCloseTrigger, show }) => {
+const Modal = ({
+  children,
+  trigger,
+  style,
+  onCloseTrigger,
+  show,
+  modalWidth
+}) => {
   const [shown, toggleShown] = useState(show);
 
   const renderTrigger = () => {
@@ -35,7 +42,7 @@ const Modal = ({ children, trigger, style, onCloseTrigger, show }) => {
           mx={"auto"}
           my={"auto"}
           p={"25px"}
-          width={["auto"]}
+          width={modalWidth ? modalWidth : ["auto"]}
           minWidth={"340px"}
           maxWidth={"960px"}
           height={["100vh", "auto"]}
