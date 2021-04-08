@@ -6,10 +6,12 @@ pragma solidity ^0.8.0;
 /// @notice Votes must be encrypted using keccak256
 /// @dev Should try to change most strings into bytes32 sometime
 contract Poll {
+
+    enum VoterState { NotVoted, Voted, Revealed }
   
     struct Voter {
         string name;   // can represent name or id 
-        bool voted;  // if true, that person already voted
+        VoterState voterState;  // if true, that person already voted
     }
     
     // Used for registering new voters
@@ -152,7 +154,7 @@ contract Poll {
         Voter storage sender = voters[msg.sender];
         
         require(bytes(sender.name).length != 0 , "Address not registered");
-        require(!sender.voted, "Already voted.");
+        require(sender.voterState == VoterState.NotVoted, "Already voted.");
         require(votes[_voteCommit].voterAddress == address(0x0), "There already exists a vote with this password");
 
         Vote memory vote;
@@ -164,7 +166,7 @@ contract Poll {
         votes[_voteCommit] = vote;
 
         // Flag voter
-        sender.voted = true;
+        sender.voterState = VoterState.Voted;
     
         totalVotes ++;
         voteCommitted("Vote committed with hash ", _voteCommit);
@@ -205,6 +207,10 @@ contract Poll {
 
         // Increase vote count for the option chosen
         choices[uintChoiceNumber].voteCount += 1;
+
+        // Flag voter
+        Voter storage sender = voters[msg.sender];
+        sender.voterState = VoterState.Revealed;
 
         //Change state of vote
         votes[encryptedVote].voteState == VoteState.Revealed;
