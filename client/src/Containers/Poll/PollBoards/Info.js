@@ -3,9 +3,10 @@ import { Card, Flex, Heading, Pill, Box, Text, Input } from "rimble-ui";
 import { POLL_STATES } from "../../../config";
 
 const Info = ({
-  info: { pollDetails, pollOwner, pollState, totalVoters, totalVotes, choices }
+  data: { pollDetails, pollOwner, pollState, totalVoters, totalVotes, choices },
+  user
 }) => {
-  console.log(choices);
+
   return (
     <Card marginBottom={"20px"}>
       <Flex flexDirection={"column"}>
@@ -50,7 +51,7 @@ const Info = ({
             width={["calc(100% - 10px)", "calc(100%/3 - 10px)"]}
             m={"5px"}
             bg={"#4E3FCE33"}
-            borderRadius={"6px"}
+            borderRadius={"4px"}
           >
             <Text color={"primary"} fontWeight={"bold"} fontSize={"larger"}>
               {totalVoters.value}
@@ -64,7 +65,7 @@ const Info = ({
             width={["calc(100% - 10px)", "calc(100%/3 - 10px)"]}
             m={"5px"}
             bg={"#4E3FCE33"}
-            borderRadius={"6px"}
+            borderRadius={"4px"}
           >
             <Text color={"primary"} fontWeight={"bold"} fontSize={"larger"}>
               {totalVotes.value}
@@ -78,7 +79,7 @@ const Info = ({
             width={["calc(100% - 10px)", "calc(100%/3 - 10px)"]}
             m={"5px"}
             bg={"#4E3FCE33"}
-            borderRadius={"6px"}
+            borderRadius={"4px"}
           >
             <Text color={"primary"} fontWeight={"bold"} fontSize={"larger"}>
               {choices && Array.isArray(choices.value)
