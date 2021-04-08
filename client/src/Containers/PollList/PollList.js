@@ -19,6 +19,7 @@ const PollList = ({ drizzleState, drizzle, initialized }) => {
         width={"100%"}
         type="text"
         placeholder="Search by poll address"
+        type="search"
         value={searchTerm}
         onChange={event => setSearchTerm(event.target.value)}
         marginBottom={"20px"}
