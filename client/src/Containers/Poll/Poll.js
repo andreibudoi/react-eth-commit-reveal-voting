@@ -104,15 +104,17 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
 
   // Voter fns
   const commitVote = (choiceIdx, password) => {
+    console.log(choiceIdx, password)
     const vote = Web3.utils.keccak256(choiceIdx + "-" + password);
+    console.log(vote)
     contract.methods["commitVote"].cacheSend(vote, {
       from: drizzleState.activeAccount.account
     });
   };
 
   const revealVote = (choiceIdx, password) => {
-    const vote = Web3.utils.keccak256(choiceIdx + "-" + password);
-    contract.methods["revealVote"].cacheSend(choiceIdx, vote, {
+    console.log(choiceIdx + "-" + password)
+    contract.methods["revealVote"].cacheSend(choiceIdx, choiceIdx + "-" + password, {
       from: drizzleState.activeAccount.account
     });
   };
@@ -136,7 +138,7 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
         }}
         user={drizzleState.activeAccount.account}
       />
-      {pollOwner.value.toLowerCase() === drizzleState.activeAccount.account && (
+      {pollOwner.value.toLowerCase() === drizzleState.activeAccount.account.toLowerCase() && (
         <Owner
           data={{ pollOwner, pollState }}
           functions={{ addChoices, addVoters, startVote, startReveal, endVote }}
@@ -145,7 +147,7 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
       )}
       {voter.value.name && (
         <Voter
-          data={{ pollOwner, pollState, choices }}
+          data={{ pollOwner, pollState, choices, voter }}
           functions={{ commitVote, revealVote }}
           user={drizzleState.activeAccount.account}
         />
