@@ -6,6 +6,13 @@ const Info = ({
   data: { pollDetails, pollOwner, pollState, totalVoters, totalVotes, choices },
   user
 }) => {
+  const max = choices.value.reduce((acc, choice) => {
+    const voteCount = parseInt(choice.voteCount);
+    return voteCount > acc ? voteCount : acc;
+  }, 0);
+  const winners = choices.value.filter(
+    choice => choice.voteCount === max.toString()
+  );
 
   return (
     <Card marginBottom={"20px"}>
@@ -89,6 +96,42 @@ const Info = ({
             <Text color={"primary"}>Choices available</Text>
           </Flex>
         </Flex>
+        {pollState.value === "3" && (
+          <>
+            <Flex justifyContent={"center"} alignItems={"center"} mt={4}>
+              <Text mb={2} fontWeight="bold" fontSize="small">
+                {`🏆 ${winners.length > 1 ? "Winners" : "Winner"} 🏆`}
+              </Text>
+            </Flex>
+            <Flex flexWrap={"wrap"}>
+              {winners.map(winner => (
+                <Flex
+                  flexDirection={"column"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  width={["calc(100%)", "calc(100%/2)"]}
+                  mb={3}
+                >
+                  <Heading
+                    m={0}
+                    fontWeight="bold"
+                    style={{
+                      textDecoration: "underline",
+                      textDecorationColor: "#4E3FCE"
+                    }}
+                  >
+                    {winner.name}
+                  </Heading>
+                  <Text mt={2} fontWeight="bold" fontSize="small">
+                    {`With ${winner.voteCount} votes out of ${
+                      totalVotes.value
+                    } (${( winner.voteCount / totalVotes.value) * 100}%)`}
+                  </Text>
+                </Flex>
+              ))}
+            </Flex>
+          </>
+        )}
       </Flex>
     </Card>
   );
