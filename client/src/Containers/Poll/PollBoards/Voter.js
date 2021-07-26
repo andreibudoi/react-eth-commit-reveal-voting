@@ -130,7 +130,11 @@ const Voter = ({
               }}
               width={"100%"}
               disabled={
-                !password || !passwordsMatch || !isValid || !optionIndex || !repeatPassword
+                !password ||
+                !passwordsMatch ||
+                !isValid ||
+                !optionIndex ||
+                !repeatPassword
               }
             >
               Cast your vote 📥
@@ -158,7 +162,8 @@ const Voter = ({
                 textDecorationColor: "#4E3FCE"
               }}
             >
-              Enter the password used last time, confirm it, then pick again your choice to reveal your vote.
+              Enter the password used last time, confirm it, then pick again
+              your choice to reveal your vote.
             </Heading.h3>
             <Field width={"100%"} label="Reenter password" mb={1}>
               <Input
@@ -225,13 +230,17 @@ const Voter = ({
               }}
               width={"100%"}
               disabled={
-                !password || !passwordsMatch || !isValid || !optionIndex || !repeatPassword
+                !password ||
+                !passwordsMatch ||
+                !isValid ||
+                !optionIndex ||
+                !repeatPassword
               }
             >
               Reveal your vote 🔑
             </Button>
           </Box>
-        ) : (
+        ) : voter.value.voterState === "2" ? (
           <Heading
             mb={0}
             style={{
@@ -240,6 +249,16 @@ const Voter = ({
             }}
           >
             Your vote has been revealed and counted towards your choice. 📣
+          </Heading>
+        ) : (
+          <Heading
+            mb={0}
+            style={{
+              textDecoration: "underline",
+              textDecorationColor: "#4E3FCE"
+            }}
+          >
+            You didn't pick an option during the voting phase. 😥
           </Heading>
         )
       ) : (

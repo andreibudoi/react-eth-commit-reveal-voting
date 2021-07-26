@@ -24,7 +24,7 @@ const PollFactory = ({ drizzleState, drizzle, initialized }) => {
       const polls = await drizzle.contracts.PollFactory.methods
         .getPolls()
         .call();
-      console.log(polls);
+
       polls &&
         polls.forEach(async pollAddress => {
           pollAddress = pollAddress.toLowerCase();

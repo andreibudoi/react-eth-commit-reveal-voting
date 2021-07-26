@@ -47,7 +47,7 @@ const Owner = ({
               onChange={event => setName(event.target.value)}
             />
           </Field>
-          <Field width={"100%"} label="Address">
+          <Field width={"100%"} label="Wallet address">
             <Input
               width={"100%"}
               type="text"

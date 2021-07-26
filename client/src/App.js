@@ -6,9 +6,6 @@ import { POLL_EVENTS } from "./config";
 import { Dashboard, PollLoader, Navigation } from "./Containers";
 
 const App = ({ drizzle, drizzleState, initialized }) => {
-  console.log("drizzle: ", drizzle);
-  console.log("drizzleState: ", drizzleState);
-
   // We need to handle account or chain changes using Drizzle store
   useEffect(() => {
     drizzle.store.dispatch(setActiveAccount(drizzleState.accounts[0]));

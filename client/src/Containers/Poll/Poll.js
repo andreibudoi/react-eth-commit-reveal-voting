@@ -104,16 +104,13 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
 
   // Voter fns
   const commitVote = (choiceIdx, password) => {
-    console.log(choiceIdx, password)
     const vote = Web3.utils.keccak256(choiceIdx + "-" + password);
-    console.log(vote)
     contract.methods["commitVote"].cacheSend(vote, {
       from: drizzleState.activeAccount.account
     });
   };
 
   const revealVote = (choiceIdx, password) => {
-    console.log(choiceIdx + "-" + password)
     contract.methods["revealVote"].cacheSend(choiceIdx, choiceIdx + "-" + password, {
       from: drizzleState.activeAccount.account
     });
@@ -129,6 +126,7 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
     <>
       <Info
         data={{
+          poll,
           pollDetails,
           pollOwner,
           pollState,
