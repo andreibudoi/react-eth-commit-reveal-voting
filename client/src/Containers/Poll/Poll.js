@@ -1,15 +1,4 @@
-import { useEffect, useState } from "react";
-import {
-  Card,
-  Flex,
-  Heading,
-  Pill,
-  Button,
-  Field,
-  Input,
-  Box,
-  Text
-} from "rimble-ui";
+import { useEffect, useState, useCallback } from "react";
 import { Owner, Info, Voter } from "./PollBoards";
 import Web3 from "web3";
 
@@ -75,46 +64,50 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
     });
   };
 
-  const addVoters = voters => {
+  const addVoters = useCallback(voters => {
     // we need to format out array so that solidity can read it
     // format is [["address", "name"], [...], ...]
     const formattedVoters = voters.map(voter => [voter.address, voter.name]);
     contract.methods["addVoters"].cacheSend(formattedVoters, {
       from: drizzleState.activeAccount.account
     });
-  };
+  });
 
-  const startVote = () => {
+  const startVote = useCallback(() => {
     contract.methods["startVote"].cacheSend({
       from: drizzleState.activeAccount.account
     });
-  };
+  });
 
-  const startReveal = () => {
+  const startReveal = useCallback(() => {
     contract.methods["startReveal"].cacheSend({
       from: drizzleState.activeAccount.account
     });
-  };
+  });
 
-  const endVote = () => {
+  const endVote = useCallback(() => {
     contract.methods["endVote"].cacheSend({
       from: drizzleState.activeAccount.account
     });
-  };
+  });
 
   // Voter fns
-  const commitVote = (choiceIdx, password) => {
+  const commitVote = useCallback((choiceIdx, password) => {
     const vote = Web3.utils.keccak256(choiceIdx + "-" + password);
     contract.methods["commitVote"].cacheSend(vote, {
       from: drizzleState.activeAccount.account
     });
-  };
+  });
 
-  const revealVote = (choiceIdx, password) => {
-    contract.methods["revealVote"].cacheSend(choiceIdx, choiceIdx + "-" + password, {
-      from: drizzleState.activeAccount.account
-    });
-  };
+  const revealVote = useCallback((choiceIdx, password) => {
+    contract.methods["revealVote"].cacheSend(
+      choiceIdx,
+      choiceIdx + "-" + password,
+      {
+        from: drizzleState.activeAccount.account
+      }
+    );
+  });
 
   return pollDetails &&
     pollOwner &&
@@ -136,7 +129,8 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
         }}
         user={drizzleState.activeAccount.account}
       />
-      {pollOwner.value.toLowerCase() === drizzleState.activeAccount.account.toLowerCase() && (
+      {pollOwner.value.toLowerCase() ===
+        drizzleState.activeAccount.account.toLowerCase() && (
         <Owner
           data={{ pollOwner, pollState }}
           functions={{ addChoices, addVoters, startVote, startReveal, endVote }}

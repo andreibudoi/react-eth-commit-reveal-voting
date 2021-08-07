@@ -12,106 +12,98 @@ import {
 } from "rimble-ui";
 import { Modal } from "../../../Components";
 
-const Owner = ({
-  data: { pollOwner, pollState },
-  functions: { addChoices, addVoters, startVote, startReveal, endVote },
-  user
-}) => {
-  const VoterModal = () => {
-    const [name, setName] = useState("");
-    const [address, setAddress] = useState("");
-    const [voters, setVoters] = useState([]);
+const VoterModal = ({ addVoters }) => {
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [voters, setVoters] = useState([]);
 
-    const addVoter = () => {
-      setVoters([...voters, { name, address }]);
-      setName("");
-      setAddress("");
-    };
-
-    const deleteVoter = index => {
-      const newVoters = [...voters];
-      newVoters.splice(index, 1);
-      setVoters(newVoters);
-    };
-
-    return (
-      <Box p={4}>
-        <Heading.h3 mt={0}>Add voters</Heading.h3>
-        <Card>
-          <Field width={"100%"} label="Name">
-            <Input
-              width={"100%"}
-              type="text"
-              required={true}
-              value={name}
-              onChange={event => setName(event.target.value)}
-            />
-          </Field>
-          <Field width={"100%"} label="Wallet address">
-            <Input
-              width={"100%"}
-              type="text"
-              required={true}
-              value={address}
-              onChange={event => setAddress(event.target.value)}
-            />
-          </Field>
-          <Button
-            width={"100%"}
-            disabled={!name || !address}
-            onClick={addVoter}
-          >
-            Add to whitelist
-          </Button>
-        </Card>
-        <Flex pt={3} pb={3} flexWrap={"wrap"}>
-          {voters.map((voter, idx) => (
-            <Pill
-              key={`${idx}-${voter.address}`}
-              color="primary"
-              pr={"2px"}
-              p={0}
-              mr={2}
-              mb={2}
-            >
-              {voter.name}
-              <Button.Text
-                icononly
-                icon={"Close"}
-                size={"small"}
-                mr={2}
-                onClick={() => deleteVoter(idx)}
-              />
-            </Pill>
-          ))}
-        </Flex>
-        <Button
-          width={"100%"}
-          disabled={!voters.length}
-          onClick={() => addVoters(voters)}
-        >
-          Confirm whitelist
-        </Button>
-      </Box>
-    );
+  const addVoter = () => {
+    setVoters([...voters, { name, address }]);
+    setName("");
+    setAddress("");
   };
 
-  const ChoiceModal = () => {
-    const [choice, setChoice] = useState("");
-    const [choices, setChoices] = useState([]);
+  const deleteVoter = index => {
+    const newVoters = [...voters];
+    newVoters.splice(index, 1);
+    setVoters(newVoters);
+  };
 
-    const addChoice = () => {
-      setChoices([...choices, choice]);
-      setChoice("");
-    };
+  return (
+    <Box p={4}>
+      <Heading.h3 mt={0}>Add voters</Heading.h3>
+      <Card>
+        <Field width={"100%"} label="Name">
+          <Input
+            width={"100%"}
+            type="text"
+            required={true}
+            value={name}
+            onChange={event => setName(event.target.value)}
+          />
+        </Field>
+        <Field width={"100%"} label="Wallet address">
+          <Input
+            width={"100%"}
+            type="text"
+            required={true}
+            value={address}
+            onChange={event => setAddress(event.target.value)}
+          />
+        </Field>
+        <Button width={"100%"} disabled={!name || !address} onClick={addVoter}>
+          Add to whitelist
+        </Button>
+      </Card>
+      <Flex pt={3} pb={3} flexWrap={"wrap"}>
+        {voters.map((voter, idx) => (
+          <Pill
+            key={`${idx}-${voter.address}`}
+            color="primary"
+            pr={"2px"}
+            p={0}
+            mr={2}
+            mb={2}
+          >
+            {voter.name}
+            <Button.Text
+              icononly
+              icon={"Close"}
+              size={"small"}
+              mr={2}
+              onClick={() => deleteVoter(idx)}
+            />
+          </Pill>
+        ))}
+      </Flex>
+      <Button
+        width={"100%"}
+        disabled={!voters.length}
+        onClick={() => addVoters(voters)}
+      >
+        Confirm whitelist
+      </Button>
+    </Box>
+  );
+};
 
-    const deleteChoice = index => {
-      const newChoices = [...choices];
-      newChoices.splice(index, 1);
-      setChoices(newChoices);
-    };
+const ChoiceModal = ({ addChoices }) => {
+  const [choice, setChoice] = useState("");
+  const [choices, setChoices] = useState([]);
 
-    return(<Box p={4}>
+  const addChoice = () => {
+    setChoices([...choices, choice]);
+    setChoice("");
+  };
+
+  const deleteChoice = index => {
+    const newChoices = [...choices];
+    newChoices.splice(index, 1);
+    setChoices(newChoices);
+  };
+
+  return (
+    <Box p={4}>
       <Heading.h3 mt={0}>Add choices</Heading.h3>
       <Card>
         <Field width={"100%"} label="Poll option">
@@ -123,12 +115,8 @@ const Owner = ({
             onChange={event => setChoice(event.target.value)}
           />
         </Field>
-        
-        <Button
-          width={"100%"}
-          disabled={!choice}
-          onClick={addChoice}
-        >
+
+        <Button width={"100%"} disabled={!choice} onClick={addChoice}>
           +
         </Button>
       </Card>
@@ -160,10 +148,14 @@ const Owner = ({
       >
         Confirm choice list
       </Button>
-    </Box>);
+    </Box>
+  );
+};
 
-  };
-
+const Owner = ({
+  data: { pollState },
+  functions: { addChoices, addVoters, startVote, startReveal, endVote }
+}) => {
   return (
     <Card marginBottom={"20px"}>
       <Text mb={2} fontWeight="bold" fontSize="small">
@@ -182,7 +174,7 @@ const Owner = ({
               </Button>
             }
           >
-            <VoterModal />
+            <VoterModal addVoters={addVoters} />
           </Modal>
 
           <Modal
@@ -196,7 +188,7 @@ const Owner = ({
               </Button>
             }
           >
-            <ChoiceModal />
+            <ChoiceModal addChoices={addChoices} />
           </Modal>
 
           <Button onClick={startVote} width={"100%"} m={"5px"}>

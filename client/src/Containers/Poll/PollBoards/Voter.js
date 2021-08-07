@@ -1,24 +1,19 @@
 import { useState } from "react";
 import {
   Card,
-  Flex,
   Heading,
-  Pill,
-  Radio,
-  Field,
   Box,
   Text,
   Input,
   Button,
-  Select
+  Select,
+  Field
 } from "rimble-ui";
-import { Modal } from "../../../Components";
 import validator from "validator";
 
 const Voter = ({
-  data: { pollOwner, pollState, choices, voter },
-  functions: { commitVote, revealVote },
-  user
+  data: { pollState, choices, voter },
+  functions: { commitVote, revealVote }
 }) => {
   const [optionIndex, setOptionIndex] = useState(null);
   const [password, setPassword] = useState("");

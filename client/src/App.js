@@ -1,8 +1,6 @@
 import { React, useEffect } from "react";
-import { Button, Box, Heading, Text } from "rimble-ui";
 import { Switch, Route } from "react-router-dom";
 import { setActiveAccount } from "./Actions/activeAccount";
-import { POLL_EVENTS } from "./config";
 import { Dashboard, PollLoader, Navigation } from "./Containers";
 
 const App = ({ drizzle, drizzleState, initialized }) => {

@@ -1,10 +1,9 @@
 import React from "react";
-import { Card, Flex, Heading, Pill, Box, Text, Input } from "rimble-ui";
+import { Card, Flex, Heading, Pill, Text, Input } from "rimble-ui";
 import { POLL_STATES } from "../../../config";
 
 const Info = ({
-  data: { pollDetails, pollOwner, pollState, totalVoters, totalVotes, choices },
-  user
+  data: { pollDetails, pollOwner, pollState, totalVoters, totalVotes, choices }
 }) => {
   const max = choices.value.reduce((acc, choice) => {
     const voteCount = parseInt(choice.voteCount);
@@ -103,7 +102,7 @@ const Info = ({
                 {`🏆 ${winners.length > 1 ? "Winners" : "Winner"} 🏆`}
               </Text>
             </Flex>
-            <Flex flexWrap={"wrap"}>
+            <Flex flexWrap={"wrap"} justifyContent={"center"}>
               {winners.map(winner => (
                 <Flex
                   flexDirection={"column"}
@@ -125,7 +124,7 @@ const Info = ({
                   <Text mt={2} fontWeight="bold" fontSize="small">
                     {`With ${winner.voteCount} votes out of ${
                       totalVotes.value
-                    } (${( winner.voteCount / totalVotes.value) * 100}%)`}
+                    } (${(winner.voteCount / totalVotes.value) * 100}%)`}
                   </Text>
                 </Flex>
               ))}
