@@ -2,6 +2,7 @@ import React from "react";
 import { DrizzleContext } from "@drizzle/react-plugin";
 import { Button, Box, Heading, Text } from "rimble-ui";
 import { PollFactory, PollList, PageContainer } from "..";
+import { LoaderOverlay } from "../../Components";
 
 const Dashboard = () => {
   return (
@@ -9,7 +10,7 @@ const Dashboard = () => {
       {drizzleContext => {
         const { drizzle, drizzleState, initialized } = drizzleContext;
         if (!initialized) {
-          return null;
+          return <LoaderOverlay />;
         }
         return (
           <PageContainer>

@@ -3,6 +3,7 @@ import { Box, Card, Flex, Heading, Text, Pill, Tooltip } from "rimble-ui";
 import { REQUIRED_NETWORK } from "../../config";
 import { DrizzleContext } from "@drizzle/react-plugin";
 import { useHistory } from "react-router-dom";
+import { LoaderOverlay } from "../../Components";
 
 const Navigation = () => {
   const history = useHistory();
@@ -12,7 +13,7 @@ const Navigation = () => {
       {drizzleContext => {
         const { drizzle, drizzleState, initialized } = drizzleContext;
         if (!initialized) {
-          return null;
+          return <LoaderOverlay />;
         }
         return (
           <Flex

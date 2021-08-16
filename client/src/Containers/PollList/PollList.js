@@ -1,10 +1,11 @@
 import { React, useState } from "react";
 import { Card, Input } from "rimble-ui";
 import { PollCard } from "..";
+import { LoaderOverlay } from "../../Components";
 
 const PollList = ({ drizzleState, drizzle, initialized }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  if (!initialized) return null;
+  if (!initialized) return <LoaderOverlay />;
   const pollList = Object.keys(drizzle.contracts)
     .filter(
       contractName =>
