@@ -1,6 +1,6 @@
 import React from "react";
 import { DrizzleContext } from "@drizzle/react-plugin";
-import { Button, Box, Heading, Text } from "rimble-ui";
+import { Heading } from "rimble-ui";
 import { PollFactory, PollList, PageContainer } from "..";
 import { LoaderOverlay } from "../../Components";
 

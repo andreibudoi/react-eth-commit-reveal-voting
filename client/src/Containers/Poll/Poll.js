@@ -58,56 +58,85 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
   const voter = contractState.voters[keys.voterKey];
 
   // Owner fns
-  const addChoices = choices => {
-    contract.methods["addChoices"].cacheSend(choices, {
-      from: drizzleState.activeAccount.account
-    });
+  const addChoices = async choices => {
+    try {
+      await contract.methods.addChoices(choices).send({
+        from: drizzleState.activeAccount.account
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   };
 
-  const addVoters = useCallback(voters => {
+  const addVoters = async voters => {
     // we need to format out array so that solidity can read it
     // format is [["address", "name"], [...], ...]
-    const formattedVoters = voters.map(voter => [voter.address, voter.name]);
-    contract.methods["addVoters"].cacheSend(formattedVoters, {
-      from: drizzleState.activeAccount.account
-    });
-  });
+    try {
+      const formattedVoters = voters.map(voter => [voter.address, voter.name]);
+      await contract.methods.addVoters(formattedVoters).send({
+        from: drizzleState.activeAccount.account
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
-  const startVote = useCallback(() => {
-    contract.methods["startVote"].cacheSend({
-      from: drizzleState.activeAccount.account
-    });
-  });
+  const startVote = async () => {
+    try {
+      await contract.methods.startVote().send({
+        from: drizzleState.activeAccount.account
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
-  const startReveal = useCallback(() => {
-    contract.methods["startReveal"].cacheSend({
-      from: drizzleState.activeAccount.account
-    });
-  });
+  const startReveal = async () => {
+    try {
+      await contract.methods.startReveal().send({
+        from: drizzleState.activeAccount.account
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
-  const endVote = useCallback(() => {
-    contract.methods["endVote"].cacheSend({
-      from: drizzleState.activeAccount.account
-    });
-  });
+  const endVote = async () => {
+    try {
+      await contract.methods.endVote().send({
+        from: drizzleState.activeAccount.account
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
   // Voter fns
-  const commitVote = useCallback((choiceIdx, password) => {
-    const vote = Web3.utils.keccak256(choiceIdx + "-" + password);
-    contract.methods["commitVote"].cacheSend(vote, {
-      from: drizzleState.activeAccount.account
-    });
-  });
-
-  const revealVote = useCallback((choiceIdx, password) => {
-    contract.methods["revealVote"].cacheSend(
-      choiceIdx,
-      choiceIdx + "-" + password,
-      {
+  const commitVote = async (choiceIdx, password) => {
+    try {
+      const vote = Web3.utils.keccak256(choiceIdx + "-" + password);
+      const voteResponse = await contract.methods.commitVote(vote).send({
         from: drizzleState.activeAccount.account
-      }
-    );
-  });
+      });
+      return Promise.resolve(voteResponse);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  const revealVote = async (choiceIdx, password) => {
+    try {
+      const voteResponse = await contract.methods
+        .revealVote(choiceIdx, choiceIdx + "-" + password)
+        .send({
+          from: drizzleState.activeAccount.account
+        });
+      console.log(voteResponse);
+      return Promise.resolve(voteResponse);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
   return pollDetails &&
     pollOwner &&
@@ -132,7 +161,7 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
       {pollOwner.value.toLowerCase() ===
         drizzleState.activeAccount.account.toLowerCase() && (
         <Owner
-          data={{ pollOwner, pollState }}
+          data={{ pollOwner, pollState, totalVoters, choices }}
           functions={{ addChoices, addVoters, startVote, startReveal, endVote }}
           user={drizzleState.activeAccount.account}
         />
