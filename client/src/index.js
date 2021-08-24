@@ -8,8 +8,7 @@ import { DrizzleContext } from "@drizzle/react-plugin";
 import { Drizzle, generateStore } from "@drizzle/store";
 import drizzleOptions from "./drizzleOptions";
 import appReducers from "./Reducers";
-import { LoaderOverlay } from "./Components";
-import ConnectionBanner from "@rimble/connection-banner";
+import { LoaderOverlay, MetamaskBanner } from "./Components";
 
 const drizzleStore = generateStore({
   drizzleOptions,
@@ -24,7 +23,6 @@ function handleEthereum() {
   if (ethereum?.isMetaMask) {
     console.log("Ethereum successfully detected!");
     isMetamaskInstalled = true;
-    console.log(ethereum.selectedAddress);
   } else {
     console.log("Please install MetaMask!");
   }
@@ -61,7 +59,7 @@ ReactDOM.render(
                   }
                   display={
                     !isMetamaskInstalled && (
-                      <ConnectionBanner onWeb3Fallback={true} />
+                      <MetamaskBanner />
                     )
                   }
                 />
