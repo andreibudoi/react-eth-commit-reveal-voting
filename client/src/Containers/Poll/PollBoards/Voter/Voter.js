@@ -5,7 +5,7 @@ import TransactionLinkCard from "./TransactionLinkCard";
 import VoteForm from "./VoteForm";
 
 const Voter = ({
-  data: { pollState, choices, voter },
+  data: { pollState, choices, voter, pollDetails },
   functions: { commitVote, revealVote }
 }) => {
   const [txHash, setTxHash] = useState(null);
@@ -35,6 +35,7 @@ const Voter = ({
             <VoteForm
               phase="COMMIT"
               voteAction={commitVote}
+              pollDetails={pollDetails}
               choices={choices}
               onSuccess={handleTransactionSuccess}
             />
@@ -46,6 +47,7 @@ const Voter = ({
             <VoteForm
               phase="REVEAL"
               voteAction={revealVote}
+              pollDetails={pollDetails}
               choices={choices}
               onSuccess={handleTransactionSuccess}
             />

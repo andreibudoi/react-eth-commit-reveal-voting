@@ -168,7 +168,7 @@ const Poll = ({ drizzleState, drizzle, poll }) => {
       )}
       {voter.value.name && (
         <Voter
-          data={{ pollOwner, pollState, choices, voter }}
+          data={{ pollOwner, pollState, choices, voter, pollDetails }}
           functions={{ commitVote, revealVote }}
           user={drizzleState.activeAccount.account}
         />

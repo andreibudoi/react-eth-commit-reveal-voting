@@ -17,9 +17,10 @@ import { generate } from "generate-password";
 import { Visibility, VisibilityOff, Replay, FileDownload } from "@rimble/icons";
 import fileDownload from "js-file-download";
 
-const FILE_NAME = "poll_password.txt";
+const FILE_NAME = "Your poll password";
+const FILE_EXTENSION = ".txt";
 
-const VoteForm = ({ phase, choices, voteAction, onSuccess }) => {
+const VoteForm = ({ phase, choices, pollDetails, voteAction, onSuccess }) => {
   const [optionIndex, setOptionIndex] = useState(null);
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -34,7 +35,9 @@ const VoteForm = ({ phase, choices, voteAction, onSuccess }) => {
     var passwordBlob = new Blob([generatedPassword], {
       type: "text/plain;charset=utf-8"
     });
-    fileDownload(passwordBlob, FILE_NAME);
+    const completeFileName = `${FILE_NAME} for ${pollDetails.value}${FILE_EXTENSION}`;
+
+    fileDownload(passwordBlob, completeFileName);
   };
 
   const getNewStrongGeneratedPassword = () => {
