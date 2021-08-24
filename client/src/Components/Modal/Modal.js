@@ -3,16 +3,14 @@ import propTypes from "prop-types";
 import {
   Modal as RimbleModal,
   Card,
-  Box,
-  Heading,
-  Flex,
-  Text,
+
   Button
 } from "rimble-ui";
 
 const Modal = ({
   children,
   trigger,
+  showClose,
   style,
   onCloseTrigger,
   show,
@@ -29,7 +27,6 @@ const Modal = ({
   };
 
   const closeModal = e => {
-    e.preventDefault();
     toggleShown(false);
     onCloseTrigger();
   };
@@ -52,17 +49,19 @@ const Modal = ({
             ...style
           }}
         >
-          <Button.Text
-            icononly
-            icon={"Close"}
-            color={"moon-gray"}
-            position={"absolute"}
-            top={0}
-            right={0}
-            mt={3}
-            mr={3}
-            onClick={closeModal}
-          />
+          {showClose && (
+            <Button.Text
+              icononly
+              icon={"Close"}
+              color={"moon-gray"}
+              position={"absolute"}
+              top={0}
+              right={0}
+              mt={3}
+              mr={3}
+              onClick={closeModal}
+            />
+          )}
           {typeof children === "function"
             ? children(closeModal)
             : cloneElement(children, { closeModal })}
@@ -80,6 +79,7 @@ Modal.propTypes = {
     propTypes.func
   ]).isRequired,
   trigger: propTypes.oneOfType([propTypes.element, propTypes.bool]),
+  showClose: propTypes.bool,
   show: propTypes.bool,
   style: propTypes.object,
   onCloseTrigger: propTypes.func
@@ -88,6 +88,7 @@ Modal.propTypes = {
 Modal.defaultProps = {
   trigger: false,
   style: {},
+  showClose: true,
   show: false,
   onCloseTrigger: () => {}
 };
