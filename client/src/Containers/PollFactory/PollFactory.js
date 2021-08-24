@@ -1,15 +1,6 @@
-import { React, useState, useEffect } from "react";
-import {
-  Button,
-  Box,
-  Heading,
-  Flex,
-  Card,
-  Text,
-  Field,
-  Input
-} from "rimble-ui";
-import { Modal } from "../../Components";
+import { React, useState, useEffect, useRef } from "react";
+import { Box, Heading, Flex, Field, Input, Loader } from "rimble-ui";
+import { Button, Modal } from "../../Components";
 import Poll from "../../artifacts/Poll.json";
 import { POLL_EVENTS } from "../../config";
 import { useHistory } from "react-router-dom";
@@ -17,6 +8,15 @@ import { useHistory } from "react-router-dom";
 const PollFactory = ({ drizzleState, drizzle, initialized }) => {
   const history = useHistory();
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const mountedRef = useRef();
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const getPolls = async () => {
@@ -44,23 +44,32 @@ const PollFactory = ({ drizzleState, drizzle, initialized }) => {
   }, []);
 
   const createPoll = async () => {
-    const response = await drizzle.contracts.PollFactory.methods
-      .createNewPoll(name)
-      .send();
-    let pollAddress = response.events.deployedContract.returnValues[0];
-    pollAddress = pollAddress.toLowerCase();
-    const web3Contract = new drizzle.web3.eth.Contract(Poll.abi, pollAddress);
+    setLoading(true);
     try {
+      const response = await drizzle.contracts.PollFactory.methods
+        .createNewPoll(name)
+        .send({
+          from: drizzleState.activeAccount.account
+        });
+      let pollAddress = response.events.deployedContract.returnValues[0];
+      pollAddress = pollAddress.toLowerCase();
+      const web3Contract = new drizzle.web3.eth.Contract(Poll.abi, pollAddress);
       await drizzle.addContract(
         { contractName: pollAddress, web3Contract },
         POLL_EVENTS
       );
       history.push(`/poll/${pollAddress}`);
-    } catch {}
+    } catch {
+    } finally {
+      if (mountedRef.current) {
+        setLoading(false);
+      }
+    }
   };
 
   return (
     <Modal
+      showClose={!loading}
       trigger={
         <Flex my={"20px"}>
           <Button width={"100%"}>Create a new Poll! 📮</Button>
@@ -79,7 +88,13 @@ const PollFactory = ({ drizzleState, drizzle, initialized }) => {
             onChange={event => setName(event.target.value)}
           />
         </Field>
-        <Button width={"100%"} disabled={!name} onClick={createPoll}>
+        <Button
+          loading={loading}
+          loadingLabel="Creating poll"
+          width={"100%"}
+          disabled={!name}
+          onClick={createPoll}
+        >
           Create
         </Button>
       </Box>
