@@ -81,18 +81,21 @@ const VoteForm = ({ phase, choices, pollDetails, voteAction, onSuccess }) => {
   const lockGeneratedPassword = () => {
     setPassword(generatedPassword);
     setRepeatPassword(generatedPassword);
+    setIsValid(true);
     setIsGeneratedPasswordUsed(true);
     savePasswordFile();
   };
 
   const handleVoteSubmit = async () => {
     setLoading(true);
-    resetForm();
 
     voteAction(optionIndex, password)
-      .then(res => onSuccess(res))
+      .then(res => {
+        resetForm();
+        onSuccess(res);
+      })
       .catch(err => {
-        console.log("Something went wrong!");
+        console.log("Something went wrong!", err);
       })
       .finally(() => setLoading(false));
   };
@@ -215,6 +218,7 @@ const VoteForm = ({ phase, choices, pollDetails, voteAction, onSuccess }) => {
           loading={loading}
           loadingLabel={phase === "COMMIT" ? `Casting` : "Revealing"}
           disabled={
+            loading ||
             !password ||
             !passwordsMatch ||
             !isValid ||

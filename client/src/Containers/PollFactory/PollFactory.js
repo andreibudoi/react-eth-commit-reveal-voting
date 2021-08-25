@@ -92,7 +92,7 @@ const PollFactory = ({ drizzleState, drizzle, initialized }) => {
           loading={loading}
           loadingLabel="Creating poll"
           width={"100%"}
-          disabled={!name}
+          disabled={!name || loading}
           onClick={createPoll}
         >
           Create

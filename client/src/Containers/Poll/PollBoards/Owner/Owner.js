@@ -36,6 +36,7 @@ const Owner = ({
           <ChoiceModal addChoices={addChoices} disabled={loading} />
           {canStartVoting ? (
             <Button
+              disabled={loading}
               loading={loading}
               onClick={handleSubmit(startVote)}
               width={"100%"}
@@ -55,6 +56,7 @@ const Owner = ({
         </Flex>
       ) : isCommitPhase ? (
         <Button
+          disabled={loading}
           loading={loading}
           onClick={handleSubmit(startReveal)}
           width={"100%"}
@@ -63,6 +65,7 @@ const Owner = ({
         </Button>
       ) : isRevealPhase ? ( // poll revealing
         <Button
+          disabled={loading}
           loading={loading}
           onClick={handleSubmit(endVote)}
           width={"100%"}

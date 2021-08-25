@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, Text } from "rimble-ui";
 import StatusInfo from "./StatusInfo";
 import TransactionLinkCard from "./TransactionLinkCard";
@@ -21,6 +21,10 @@ const Voter = ({
   const handleTransactionSuccess = res => {
     setTxHash(res.transactionHash);
   };
+
+  useEffect(() => {
+    isRevealPhase && setTxHash(null);
+  }, [isRevealPhase]);
 
   return (
     <>
