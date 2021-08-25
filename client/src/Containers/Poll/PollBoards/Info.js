@@ -121,10 +121,17 @@ const Info = ({
                   >
                     {winner.name}
                   </Heading>
-                  <Text mt={2} fontWeight="bold" fontSize="small">
+                  <Text
+                    mt={2}
+                    fontWeight="bold"
+                    fontSize="small"
+                    textAlign="center"
+                  >
                     {`With ${winner.voteCount} votes out of ${
                       totalVotes.value
-                    } (${(winner.voteCount / totalVotes.value) * 100}%)`}
+                    } (${((winner.voteCount / totalVotes.value) * 100).toFixed(
+                      2
+                    )}%)`}
                   </Text>
                 </Flex>
               ))}
