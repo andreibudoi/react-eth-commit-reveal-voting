@@ -118,7 +118,7 @@ const VoteForm = ({ phase, choices, pollDetails, voteAction, onSuccess }) => {
         {phase === "COMMIT" && !isGeneratedPasswordUsed && (
           <Card mb="4" mt="4" boxShadow="0">
             <Heading.h5 mb="2" mt="0">
-              We recomend you to use the more secure generated password below!
+              We recommend you to use the more secure generated password below!
               Make sure you don't lose it.
             </Heading.h5>
             <Flex mb="3">

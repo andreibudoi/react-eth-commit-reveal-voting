@@ -76,7 +76,7 @@ const Info = ({
             <Text color={"primary"} fontWeight={"bold"} fontSize={"larger"}>
               {totalVotes.value}
             </Text>
-            <Text color={"primary"}>Votes casted</Text>
+            <Text color={"primary"}>Votes cast</Text>
           </Flex>
           <Flex
             alignItems={"center"}
