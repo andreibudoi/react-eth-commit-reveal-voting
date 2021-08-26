@@ -34,7 +34,9 @@ const VoterModal = ({ addVoters, disabled }) => {
     setLoading(true);
     addVoters(voters)
       .then(() => closeModal())
-      .catch(err => {})
+      .catch(err => {
+        console.log("Something went wrong!", err);
+      })
       .finally(() => setLoading(false));
   };
 

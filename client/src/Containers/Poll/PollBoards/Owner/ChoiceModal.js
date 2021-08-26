@@ -32,7 +32,9 @@ const ChoiceModal = ({ addChoices, disabled }) => {
     setLoading(true);
     addChoices(choices)
       .then(() => closeModal())
-      .catch(err => {})
+      .catch(err => {
+        console.log("Something went wrong!", err);
+      })
       .finally(() => setLoading(false));
   };
 

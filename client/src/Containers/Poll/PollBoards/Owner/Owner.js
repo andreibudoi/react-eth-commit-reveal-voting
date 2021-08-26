@@ -20,7 +20,7 @@ const Owner = ({
     setLoading(true);
     mutation()
       .catch(err => {
-        console.log("Something went wrong!");
+        console.log("Something went wrong!", err);
       })
       .finally(() => setLoading(false));
   };
